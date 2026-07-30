@@ -115,28 +115,6 @@ https://harmony-by-akhileshbisht.netlify.app/
 
 ![Responsive View](assets/images/screenshots/mobile-view.png)
 
-> Screenshot Coming Soon
-
----
-
-## Home Page
-
-> Screenshot Coming Soon
-
----
-
-## Login Page
-
-> Screenshot Coming Soon
-
----
-
-## Search
-
-> Screenshot Coming Soon
-
----
-
 # ⚙️ Installation
 
 Clone the repository
@@ -183,7 +161,7 @@ https://github.com/akhileshbisht79
 
 LinkedIn
 
-(Add your LinkedIn profile here)
+www.linkedin.com/in/akhileshbishtt
 
 ---
 
