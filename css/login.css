@@ -1,0 +1,449 @@
+/* --- Global --- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #090909;
+    color: #fff;
+    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* --- Background --- */
+
+.background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2;
+}
+
+.blur {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+}
+
+.circle1 {
+    width: 350px;
+    height: 350px;
+    background: #1DB954;
+    top: -80px;
+    left: -80px;
+    opacity: .35;
+}
+
+.circle2 {
+    width: 300px;
+    height: 300px;
+    background: #1db954;
+    bottom: -100px;
+    right: -80px;
+    opacity: .30;
+}
+
+.circle3 {
+    width: 220px;
+    height: 220px;
+    background: #4CAF50;
+    top: 45%;
+    left: 55%;
+    opacity: .15;
+}
+
+/* --- Logo --- */
+
+.logo {
+    position: absolute;
+    top: 35px;
+    left: 50px;
+    text-decoration: none;
+    color: #1DB954;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.logo i {
+    margin-right: 10px;
+}
+
+/* --- Main Container --- */
+
+.auth-container {
+    width: 1000px;
+    max-width: 95%;
+    height: 620px;
+    display: flex;
+    background: rgba(255, 255, 255, .06);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+}
+
+/* --- Left Side --- */
+
+.welcome-side {
+    width: 45%;
+    background: linear-gradient(135deg, #1DB954, #14833b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px;
+    text-align: center;
+}
+
+.welcome-side h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.welcome-side p {
+    line-height: 30px;
+    font-size: 16px;
+}
+
+.music-icon {
+    margin-top: 60px;
+    font-size: 120px;
+    animation: rotateDisc 12s linear infinite;
+}
+
+@keyframes rotateDisc {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Right Side --- */
+
+.form-side {
+    width: 55%;
+    padding: 50px;
+    position: relative;
+}
+
+/* --- Toggle --- */
+
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+
+.toggle-buttons button {
+    width: 160px;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    background: #202020;
+    transition: .3s;
+}
+
+.toggle-buttons button:first-child {
+    border-radius: 50px 0 0 50px;
+}
+
+.toggle-buttons button:last-child {
+    border-radius: 0 50px 50px 0;
+}
+
+.toggle-buttons .active {
+    background: #1DB954;
+}
+
+/* --- Forms --- */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#signupForm {
+    display: none;
+}
+
+form h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* --- Input Box --- */
+
+.input-box {
+    position: relative;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 15px 50px;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    background: #1b1b1b;
+    color: #fff;
+    font-size: 15px;
+    transition: .3s;
+}
+
+.input-box input:focus {
+    box-shadow: 0 0 15px rgba(29, 185, 84, .35);
+}
+
+.input-box i:first-child {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #1DB954;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #bcbcbc;
+}
+
+/* --- Extra --- */
+
+.extra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.extra a {
+    text-decoration: none;
+    color: #1DB954;
+}
+
+.extra input {
+    margin-right: 5px;
+}
+
+/* --- Button --- */
+
+.submit-btn {
+    margin-top: 10px;
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    background: #1DB954;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px #1DB954;
+}
+
+/* --- Toast --- */
+
+#toast {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: #1DB954;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: .4s;
+    z-index: 9999;
+}
+
+#toast.show {
+    opacity: 1;
+}
+
+/* --- Footer --- */
+
+footer {
+    position: absolute;
+    bottom: 20px;
+    color: #888;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* --- Responsive --- */
+
+@media(max-width:900px) {
+    .auth-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .welcome-side {
+        width: 100%;
+        padding: 40px;
+    }
+
+    .form-side {
+        width: 100%;
+        padding: 35px;
+    }
+
+    .music-icon {
+        font-size: 80px;
+    }
+}
+
+@media(max-width:600px) {
+    .logo {
+        left: 20px;
+        top: 20px;
+        font-size: 24px;
+    }
+
+    .welcome-side h1 {
+        font-size: 32px;
+    }
+
+    .toggle-buttons button {
+        width: 120px;
+    }
+
+    .input-box input {
+        padding: 14px 45px;
+    }
+
+    footer {
+        display: none;
+    }
+}
+
+/* --- Small Mobile Login (< 480px) --- */
+
+@media(max-width:480px) {
+    body {
+        overflow-y: auto;
+        justify-content: flex-start;
+        padding: 0;
+        min-height: 100dvh;
+    }
+
+    .logo {
+        position: relative;
+        top: auto;
+        left: auto;
+        font-size: 22px;
+        padding: 18px 15px 5px;
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+
+    .auth-container {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        border-radius: 20px 20px 0 0;
+        margin: 10px 10px 0;
+        min-height: calc(100dvh - 110px);
+    }
+
+    .welcome-side {
+        padding: 20px 18px;
+    }
+
+    .welcome-side h1 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .welcome-side p {
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    .music-icon {
+        font-size: 50px;
+        margin-top: 18px;
+    }
+
+    .form-side {
+        padding: 20px 16px 25px;
+    }
+
+    .toggle-buttons {
+        margin-bottom: 20px;
+    }
+
+    .toggle-buttons button {
+        width: 90px;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    form {
+        gap: 14px;
+    }
+
+    form h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .input-box input {
+        padding: 11px 38px;
+        font-size: 13px;
+    }
+
+    .input-box i:first-child {
+        left: 14px;
+        font-size: 14px;
+    }
+
+    .toggle-password {
+        right: 14px;
+        font-size: 14px;
+    }
+
+    .submit-btn {
+        padding: 11px;
+        font-size: 14px;
+    }
+
+    #toast {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+        text-align: center;
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+
+    footer {
+        display: none;
+    }
+}
