@@ -6,201 +6,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Harmony | Login</title>
+    <title>Harmony</title>
+
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 
     <link rel="stylesheet" href="css/login.css">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
 <body>
 
-    <!-- Background -->
+    <!-- Ambient background -->
 
-    <div class="background">
-
-        <div class="blur circle1"></div>
-        <div class="blur circle2"></div>
-        <div class="blur circle3"></div>
-
+    <div class="aurora" aria-hidden="true">
+        <span class="blob blob-a"></span>
+        <span class="blob blob-b"></span>
+        <span class="blob blob-c"></span>
+        <span class="grain"></span>
     </div>
 
     <!-- Logo -->
 
     <a href="index.html" class="logo">
 
-        <i class="fa-solid fa-headphones-simple"></i>
-        Harmony
+        <span class="logo-mark">
+            <i class="fa-solid fa-headphones"></i>
+        </span>
+
+        <span class="logo-name">Harmony</span>
 
     </a>
 
-    <!-- Authentication Container -->
+    <!-- Auth container -->
 
-    <div class="auth-container">
+    <div class="auth-wrap">
 
-        <!-- Left Side -->
+        <div class="auth-container glass">
 
-        <div class="welcome-side">
+            <!-- Left / Welcome -->
 
-            <h1>Welcome Back 🎵</h1>
+            <div class="welcome-side">
 
-            <p>
+                <div class="welcome-inner">
 
-                Find Your Perfect Sound
-                From trending hits to timeless classics.
-                Log in and experience Harmony.
-            </p>
+                    <span class="eyebrow">
+                        <i class="fa-solid fa-bolt"></i>
+                        30s previews, zero friction
+                    </span>
 
-            <div class="music-icon">
+                    <h1>Welcome Back</h1>
 
-                <i class="fa-solid fa-compact-disc"></i>
+                    <p>
+                        From trending hits to timeless classics —
+                        log in and dive back into your sound.
+                    </p>
+
+                    <div class="disc">
+
+                        <span class="disc-disc">
+
+                            <span class="disc-center">
+                                <i class="fa-solid fa-headphones"></i>
+                            </span>
+
+                        </span>
+
+                        <span class="disc-ring"></span>
+
+                    </div>
+
+                    <div class="eq-row" aria-hidden="true">
+
+                        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </div>
+            <!-- Right Side -->
 
-        <!-- Right Side -->
+            <div class="form-side">
 
-        <div class="form-side">
+                <!-- Toggle -->
 
-            <!-- Toggle -->
+                <div class="toggle-buttons" role="tablist">
 
-            <div class="toggle-buttons">
+                    <button id="loginTab" class="active" type="button">Login</button>
 
-                <button id="loginTab" class="active">
-                    Login
-                </button>
+                    <button id="signupTab" type="button">Signup</button>
 
-                <button id="signupTab">
-                    Signup
-                </button>
+                </div>
+
+                <!-- LOGIN FORM -->
+
+                <form id="loginForm" novalidate>
+
+                    <h2>Sign in to Harmony</h2>
+
+                    <p class="form-sub">Let's pick up where you left off.</p>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input type="email" id="loginEmail" placeholder="Email address" autocomplete="email" required>
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" required>
+
+                        <span class="toggle-password">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </span>
+
+                    </div>
+
+                    <div class="extra">
+
+                        <span class="hint">Demo login works offline · saved locally</span>
+
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+
+                        <span>Login</span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </form>
+
+                <!-- SIGNUP FORM -->
+
+                <form id="signupForm" novalidate>
+
+                    <h2>Create your account</h2>
+
+                    <p class="form-sub">Free forever. No credit card needed.</p>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input type="text" id="signupUsername" placeholder="Username" autocomplete="nickname" required>
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input type="email" id="signupEmail" placeholder="Email Address" autocomplete="email" required>
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password" required>
+
+                        <span class="toggle-password">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </span>
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password" autocomplete="new-password" required>
+
+                        <span class="toggle-password">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </span>
+
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+
+                        <span>Create Account</span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </form>
 
             </div>
-
-            <!-- LOGIN FORM -->
-
-            <form id="loginForm">
-
-                <h2>Login</h2>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                    <input type="email" id="loginEmail" placeholder="Email Address" required>
-
-                </div>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input type="password" id="loginPassword" placeholder="Password" required>
-
-                    <span class="toggle-password">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </span>
-
-                </div>
-
-                <div class="extra">
-
-
-
-
-                </div>
-
-                <button type="submit" class="submit-btn">
-
-                    Login
-
-                </button>
-
-            </form>
-
-            <!-- SIGNUP FORM -->
-
-            <form id="signupForm">
-
-                <h2>Create Account</h2>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-user"></i>
-
-                    <input type="text" id="signupUsername" placeholder="Username" required>
-
-                </div>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                    <input type="email" id="signupEmail" placeholder="Email Address" required>
-
-                </div>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input type="password" id="signupPassword" placeholder="Password" required>
-
-                    <span class="toggle-password">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </span>
-
-                </div>
-
-                <div class="input-box">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-
-                    <span class="toggle-password">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </span>
-
-                </div>
-
-                <button type="submit" class="submit-btn">
-
-                    Create Account
-
-                </button>
-
-            </form>
 
         </div>
 
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast -->
 
-    <div id="toast"></div>
-
-    <!-- Footer -->
-
-    <footer>
-
-        © 2026 Harmony Music Streaming
-        <br>
-        Designed & Developed by Akhil
-
-    </footer>
+    <div id="toast" role="status"></div>
 
     <script src="login.js"></script>
 

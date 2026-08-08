@@ -8,9 +8,10 @@ const toast = document.getElementById("toast");
 
 // --- Toast ---
 
-function showToast(message, color = "#1DB954") {
+function showToast(message, color = "#2563eb") {
     toast.innerText = message;
-    toast.style.background = color;
+    toast.style.background = "#ffffff";
+    toast.style.borderColor = color;
     toast.classList.add("show");
     setTimeout(() => {
         toast.classList.remove("show");
@@ -45,8 +46,13 @@ signupForm.addEventListener("submit", function (e) {
         showToast("Passwords do not match", "red");
         return;
     }
-    const user = { username, email, password };
-    localStorage.setItem("user", JSON.stringify(user));
+    const users = JSON.parse(localStorage.getItem("harmonyUsers")) || {};
+    if (users[email]) {
+        showToast("Account already exists. Try logging in.", "red");
+        return;
+    }
+    users[email] = { username, email, password };
+    localStorage.setItem("harmonyUsers", JSON.stringify(users));
     showToast("Signup Successful!");
     signupForm.reset();
     loginTab.click();
@@ -58,13 +64,15 @@ loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const users = JSON.parse(localStorage.getItem("harmonyUsers")) || {};
+    const storedUser = users[email];
     if (!storedUser) {
         showToast("No account found. Please Signup.", "red");
         return;
     }
-    if (email === storedUser.email && password === storedUser.password) {
+    if (password === storedUser.password) {
         showToast("Login Successful!");
+        localStorage.setItem("harmonySession", email);
         localStorage.setItem("loggedIn", "true");
         setTimeout(() => {
             window.location.href = "home.html";

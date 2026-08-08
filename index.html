@@ -6,13 +6,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Harmony | Online Music Streaming</title>
+    <title>Harmony</title>
+
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 
     <link rel="stylesheet" href="css/index.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -21,29 +25,40 @@
 
 <body>
 
+    <!-- Ambient background layers -->
+
+    <div class="aurora" aria-hidden="true">
+        <span class="blob blob-a"></span>
+        <span class="blob blob-b"></span>
+        <span class="blob blob-c"></span>
+        <span class="grain"></span>
+    </div>
+
     <!-- ================= NAVBAR ================= -->
 
-    <header>
+    <header class="site-nav">
 
         <nav class="navbar">
 
-            <div class="logo">
+            <a href="#home" class="brand">
 
-                <i class="fa-solid fa-headphones"></i>
+                <span class="brand-mark">
+                    <i class="fa-solid fa-headphones"></i>
+                </span>
 
-                <span>Harmony</span>
+                <span class="brand-name">Harmony</span>
 
-            </div>
+            </a>
 
             <ul class="nav-links">
 
-                <li><a href="#home">Home</a></li>
+                <li><a href="#home"><i class="fa-solid fa-house"></i>Home</a></li>
 
-                <li><a href="#features">Features</a></li>
+                <li><a href="#features"><i class="fa-solid fa-music"></i>Features</a></li>
 
-                <li><a href="#about">About</a></li>
+                <li><a href="#about"><i class="fa-solid fa-user"></i>About</a></li>
 
-                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#faq"><i class="fa-solid fa-circle-question"></i>FAQ</a></li>
 
             </ul>
 
@@ -51,11 +66,13 @@
 
                 <button class="login-btn">
 
-                    Login
+                    <span>Login</span>
+
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
 
                 </button>
 
-                <button class="hamburger" id="hamburger" aria-label="Menu">
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu">
 
                     <i class="fa-solid fa-bars"></i>
 
@@ -69,19 +86,19 @@
 
                 <ul class="mobile-nav-links">
 
-                    <li><a href="#home">Home</a></li>
+                    <li><a href="#home"><i class="fa-solid fa-house"></i>Home</a></li>
 
-                    <li><a href="#features">Features</a></li>
+                    <li><a href="#features"><i class="fa-solid fa-music"></i>Features</a></li>
 
-                    <li><a href="#about">About</a></li>
+                    <li><a href="#about"><i class="fa-solid fa-user"></i>About</a></li>
 
-                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#faq"><i class="fa-solid fa-circle-question"></i>FAQ</a></li>
 
                 </ul>
 
                 <button class="login-btn mobile-login-btn">
 
-                    Login
+                    <span>Login</span>
 
                 </button>
 
@@ -91,275 +108,384 @@
 
     </header>
 
-    <!-- ================= HERO ================= -->
+    <main>
 
-    <section class="hero" id="home">
+        <!-- ================= HERO ================= -->
 
-        <div class="hero-content">
+        <section class="hero" id="home">
 
-            <h1>
+            <div class="hero-copy">
 
-                Feel The Music.<br>
+                <div class="herowave" aria-hidden="true">
 
-                Live Every Beat.
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
 
-            </h1>
+                </div>
 
-            <p>
+                <h1 class="headline">
 
-Every Song Starts With A Preview.
+                    Feel The Music.
 
-Instantly search artists and enjoy 30-second music previews before discovering your next favorite track.
-            </p>
+                    <span class="grad-text">Live&nbsp;Every&nbsp;Beat.</span>
 
-            <div class="hero-buttons">
+                </h1>
 
-                <button class="primary-btn">
+                <p class="lede">
 
-                    Get Started
-
-                </button>
-
-                <button class="secondary-btn">
-
-                    Explore Music
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- Hero Image -->
-
-        <div class="hero-image">
-
-            <div class="circle one"></div>
-
-            <div class="circle two"></div>
-
-            <div class="music-card">
-
-                <i class="fa-solid fa-music"></i>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- ================= FEATURES ================= -->
-
-    <section id="features" class="features">
-
-        <h2>
-
-            Why Choose Harmony?
-
-        </h2>
-
-        <div class="feature-grid">
-
-            <div class="feature-box">
-
-                <i class="fa-solid fa-music"></i>
-
-                <h3>Unlimited Music</h3>
-
-                <p>
-
-                    Search millions of songs with the iTunes API.
+                    Search millions of songs, discover artists, and taste a 30-second
+                    preview before you pick your next favorite track.
 
                 </p>
 
-            </div>
+                <div class="hero-cta">
 
-            <div class="feature-box">
+                    <button class="btn btn-primary">
 
-                <i class="fa-solid fa-mobile-screen-button"></i>
+                        Get Started
 
-                <h3>Responsive</h3>
+                        <i class="fa-solid fa-arrow-right"></i>
 
-                <p>
+                    </button>
 
-                    Beautiful experience on every device.
+                    <button class="btn btn-ghost">
 
-                </p>
+                        <i class="fa-solid fa-circle-play"></i>
 
-            </div>
+                        Explore Music
 
-        </div>
+                    </button>
 
-    </section>
+                </div>
 
-    <!-- ================= ABOUT ================= -->
+                <div class="hero-proof">
 
-    <section id="about" class="about">
+                    <span><i class="fa-solid fa-headphones"></i> 30s previews</span>
 
-        <h2>
+                    <span><i class="fa-solid fa-magnifying-glass"></i> Instant search</span>
 
-            About The Developer
-
-        </h2>
-
-        <div class="about-container">
-
-            <div class="developer-image">
-
-                <img src="images/developer.jpg" alt="Developer">
-
-            </div>
-
-            <div class="developer-info">
-
-                <h3>
-
-                Akhilesh Bisht
-
-                </h3>
-
-                <h4>
-
-                Frontend Developer
-
-                </h4>
-
-                <p>
-
-                    Harmony is a frontend-based music streaming web
-                    application developed using HTML 5, CSS 3,
-                    JavaScript and the iTunes Search API.
-
-                    The project focuses on creating a clean,
-                    modern and responsive user experience.
-
-                </p>
-
-                <div class="social-links">
-
-                    <a href="https://www.linkedin.com/in/akhilesh-bisht-310509281" target="_blank" rel="noopener"><i
-                            class="fab fa-linkedin"></i></a>
-
-                    <a href="https://www.instagram.com/akhlsxh/?utm_source=ig_web_button_share_sheet" target="_blank"
-                        rel="noopener"><i class="fab fa-instagram"></i></a>
-
-                    <a href="mailto:bishtakhilesh79@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+                    <span><i class="fa-solid fa-egg"></i> 100% Free</span>
 
                 </div>
 
             </div>
 
-        </div>
+            <!-- Hero visual -->
 
-    </section>
+            <div class="hero-visual">
 
-    <!-- ================= FAQ ================= -->
+                <div class="vinyl">
 
-    <section class="faq" id="faq">
+                    <div class="vinyl-disc">
 
-        <h2>
+                        <span class="vinyl-ring r1"></span>
 
-            Frequently Asked Questions
+                        <span class="vinyl-ring r2"></span>
 
-        </h2>
+                        <span class="vinyl-ring r3"></span>
 
-        <div class="faq-box">
+                        <span class="vinyl-center">
 
-            <h3>
+                            <i class="fa-solid fa-headphones"></i>
 
-                Is Harmony Free?
+                        </span>
 
-            </h3>
+                    </div>
 
-            <p>
+                    <div class="pulse-ring"></div>
 
-                Yes. Harmony is completely free.
+                </div>
 
-            </p>
+            </div>
 
-        </div>
+            <!-- Floating notes -->
 
-        <div class="faq-box">
+            <div class="notes" aria-hidden="true">
 
-            <h3>
+                <i class="fa-solid fa-music"></i>
 
-                Which API is Used?
+                <i class="fa-solid fa-music"></i>
 
-            </h3>
+                <i class="fa-solid fa-note-sticky"></i>
 
-            <p>
+                <i class="fa-solid fa-music"></i>
 
-                Harmony uses the iTunes Search API for music previews.
+                <i class="fa-solid fa-headphones"></i>
 
-            </p>
+                <i class="fa-solid fa-note-sticky"></i>
 
-        </div>
+                <i class="fa-solid fa-music"></i>
 
-        <div class="faq-box">
+            </div>
 
-            <h3>
+        </section>
 
-                Is Login Required?
+        <!-- ================= FEATURES ================= -->
 
-            </h3>
+        <section id="features" class="features">
 
-            <p>
+            <header class="section-head">
 
-                Yes. Login is required before entering the application.
+                <span class="chip">Features</span>
 
-            </p>
+                <h2>Why choose <em>Harmony</em>?</h2>
 
-        </div>
+            </header>
 
-    </section>
+            <div class="feature-grid">
 
-    <!-- ================= CTA ================= -->
+                <div class="feature-box">
 
-    <section class="cta">
+                    <span class="feature-icon">
 
-        <h2>
+                        <i class="fa-solid fa-music"></i>
 
-            Ready To Start Listening?
+                    </span>
 
-        </h2>
+                    <h3>Unlimited Music</h3>
 
-        <p>
+                    <p>Search millions of songs through the iTunes catalog and preview any of them in seconds.</p>
 
-            Join Harmony and enjoy music anytime.
+                </div>
 
-        </p>
+                <div class="feature-box">
 
-        <button class="primary-btn">
+                    <span class="feature-icon">
 
-            Start Listening
+                        <i class="fa-solid fa-clock"></i>
 
-        </button>
+                    </span>
 
-    </section>
+                    <h3>30-Second Previews</h3>
 
-    <script src="index.js"></script>
+                    <p>Fast, instant audio previews on every track — perfect for discovering your next favorite.</p>
+
+                </div>
+
+                <div class="feature-box">
+
+                    <span class="feature-icon">
+
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+
+                    </span>
+
+                    <h3>Responsive Everywhere</h3>
+
+                    <p>A buttery, beautiful experience on desktop, tablet and phone — tuned for every screen.</p>
+
+                </div>
+
+                <div class="feature-box">
+
+                    <span class="feature-icon">
+
+                        <i class="fa-solid fa-rocket"></i>
+
+                    </span>
+
+                    <h3>Fast & Free</h3>
+
+                    <p>Blazing search results with zero signup fees. Harmony stays completely free, forever.</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= ABOUT ================= -->
+
+        <section id="about" class="about">
+
+            <header class="section-head">
+
+                <span class="section-chip">About</span>
+
+                <h2>Behind the <em>Beats</em></h2>
+
+            </header>
+
+            <div class="about-container">
+
+                <div class="developer-image">
+
+                    <img src="images/developer.jpg" alt="Portrait of Akhilesh Bisht">
+
+                </div>
+
+                <div class="developer-info">
+
+                    <span class="role-chip">Frontend Developer</span>
+
+                    <h3>Akhilesh Bisht</h3>
+
+                    <p>
+
+                        Harmony is a frontend music-preview web application built with
+                        HTML5, CSS3, JavaScript and the iTunes Search API. It focuses on a
+                        clean, modern and responsive user experience — so the interface
+                        feels as good as the music sounds.
+
+                    </p>
+
+                    <div class="social-links">
+
+                        <a href="https://www.linkedin.com/in/akhilesh-bisht-310509281" target="_blank" rel="noopener"
+                            aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+
+                        <a href="https://www.instagram.com/akhlsxh/?utm_source=ig_web_button_share_sheet"
+                            target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+
+                        <a href="mailto:bishtakhilesh79@gmail.com" aria-label="Email"><i
+                                class="fa-solid fa-envelope"></i></a>
+
+                    </div>
+
+                    <div class="about-stats">
+
+                        <span><b>HTML5</b> Structure</span>
+
+                        <span><b>CSS3</b> Design</span>
+
+                        <span><b>JS</b> Logic</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= FAQ ================= -->
+
+        <section class="faq" id="faq">
+
+            <header class="section-head">
+
+                <span class="section-chip">FAQ</span>
+
+                <h2>Frequently Asked <em>Questions</em></h2>
+
+            </header>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+
+                    <button class="faq-q" type="button">
+
+                        <span>Is Harmony free?</span>
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </button>
+
+                    <div class="faq-a">
+
+                        <p>Yes. Harmony is completely free — every feature, every preview, no paywall.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="faq-item">
+
+                    <button class="faq-q" type="button">
+
+                        <span>Which API is used?</span>
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </button>
+
+                    <div class="faq-a">
+
+                        <p>Harmony uses the iTunes Search API to stream 30-second music previews.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="faq-item">
+
+                    <button class="faq-q" type="button">
+
+                        <span>Is login required?</span>
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </button>
+
+                    <div class="faq-a">
+
+                        <p>Yes. Login is required to enter the app so your recent listens stay personal.</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= CTA ================= -->
+
+        <section class="cta">
+
+            <div class="cta-panel glass">
+
+                <span class="eyebrow">
+
+                    <i class="fa-solid fa-headphones"></i>
+
+                    Join the session
+
+                </span>
+
+                <h2>Ready To Start <em>Listening</em>?</h2>
+
+                <p>Join Harmony and explore music anytime, on any device.</p>
+
+                <button class="btn btn-primary">
+
+                    Start Listening
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
 
     <!-- ================= FOOTER ================= -->
 
     <footer>
 
-        <div class="footer-logo">
+        <div class="footer-inner">
 
-            <i class="fa-solid fa-headphones"></i>
+            <a href="#home" class="brand">
 
-            Harmony
+                <span class="brand-mark">
+
+                    <i class="fa-solid fa-headphones"></i>
+
+                </span>
+
+                <span class="brand-name">Harmony</span>
+
+            </a>
+
+            <p>© 2026 Harmony Music Preview — Designed &amp; Developed by <b>Akhilesh Bisht</b></p>
 
         </div>
 
-        <p>
-
-            © 2026 Harmony Music Streaming
-
-            Designed & Developed by Akhilesh Bisht
-
-        </p>
-
     </footer>
+
+    <script src="index.js"></script>
 
 </body>
 

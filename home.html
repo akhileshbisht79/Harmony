@@ -6,31 +6,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Harmony | Music Dashboard</title>
+    <title>Harmony</title>
 
-    <!-- CSS -->
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+
     <link rel="stylesheet" href="css/home.css">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
 <body>
 
-    <!-- Sidebar -->
+    <!-- Ambient background -->
+
+    <div class="aurora" aria-hidden="true">
+        <span class="blob blob-a"></span>
+        <span class="blob blob-b"></span>
+        <span class="blob blob-c"></span>
+        <span class="grain"></span>
+    </div>
+
+    <!-- ================= SIDEBAR ================= -->
 
     <aside class="sidebar">
 
         <div class="logo">
 
-            <i class="fa-solid fa-headphones-simple"></i>
+            <span class="logo-mark">
+                <i class="fa-solid fa-headphones"></i>
+            </span>
 
-            <span>Harmony</span>
+            <span class="logo-name">Harmony</span>
 
         </div>
 
@@ -38,32 +52,41 @@
 
             <li class="active" data-target="page-top">
                 <i class="fa-solid fa-house"></i>
-                Home
+                <span>Home</span>
             </li>
 
-            <li data-target="trendingSongs">
-                <i class="fa-solid fa-fire"></i>
-                Trending
+            <li data-target="chartsSection">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Charts</span>
             </li>
 
             <li data-target="recentContainer">
                 <i class="fa-solid fa-clock-rotate-left"></i>
-                Recent
+                <span>Recent</span>
+            </li>
+
+            <li data-target="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Search</span>
             </li>
 
         </ul>
 
-        <button id="logoutBtn">
+        <div class="side-footer">
 
-            <i class="fa-solid fa-right-from-bracket"></i>
+            <button id="logoutBtn">
 
-            Logout
+                <i class="fa-solid fa-right-from-bracket"></i>
 
-        </button>
+                <span>Logout</span>
+
+            </button>
+
+        </div>
 
     </aside>
 
-    <!-- Main -->
+    <!-- ================= MAIN ================= -->
 
     <main class="main-content">
 
@@ -71,17 +94,16 @@
 
         <!-- TOP BAR -->
 
-        <header class="topbar" id="topbar">
+        <header class="topbar">
 
             <div class="search-box">
 
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search songs, albums or artists…"
+                    autocomplete="off" aria-label="Search songs">
 
-                <input type="text" id="searchInput" placeholder="Search Songs, Albums or Artists">
+                <button id="searchBtn" aria-label="Search">
 
-                <button id="searchBtn">
-
-                    <i class="fa-solid fa-arrow-right"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
 
                 </button>
 
@@ -89,95 +111,126 @@
 
             <div class="user">
 
-                <i class="fa-solid fa-user-circle"></i>
-
-                <span id="username">
-
-                    Welcome
-
+                <span class="user-avatar">
+                    <i class="fa-solid fa-user"></i>
                 </span>
+
+                <span id="username">Welcome</span>
 
             </div>
 
         </header>
 
+        <!-- SEARCH VIEW (dedicated search page — same page, player keeps playing) -->
+
+        <section class="search-section view" id="searchView" hidden>
+
+            <div class="section-title">
+
+                <h2>Try Searching</h2>
+
+                <span class="section-count">Quick picks for you</span>
+
+            </div>
+
+            <div class="suggest-list" id="suggestList">
+
+            </div>
+
+            <div class="section-title results-head">
+
+                <h2>Search Results</h2>
+
+                <span class="section-count" id="searchCount">0 tracks</span>
+
+            </div>
+
+            <div class="song-list" id="songContainer">
+
+            </div>
+
+        </section>
+
         <!-- HERO -->
 
-        <section class="hero" id="hero">
+        <section class="hero view" id="hero">
 
-            <div class="hero-text">
+            <div class="hero-blob" aria-hidden="true"></div>
 
-                <h1>
+            <div class="hero-head">
 
-                    <span id="heroGreeting">Good Evening</span>,
+                <div class="hero-title">
 
-                    <span id="heroUser">
+                    <span class="eyebrow">
+                        <i class="fa-solid fa-fire"></i>
+                        Trending now
+                    </span>
 
-                        User
+                    <h1>What the world is listening to</h1>
+
+                </div>
+
+            </div>
+
+            <div class="hero-marquee">
+
+                <div class="hero-track" id="heroTrack"></div>
+
+            </div>
+
+        </section>
+
+        <!-- CHARTS -->
+
+        <section class="songs-section view" id="chartsSection">
+
+            <div class="section-title">
+
+                <h2>Top Charts</h2>
+
+                <span class="section-chips">
+
+                    <span class="chip"><i class="fa-solid fa-chart-simple"></i> Live Top 50</span>
+
+                </span>
+
+            </div>
+
+            <div class="chart-grid" id="chartGrid">
+
+            </div>
+
+            <!-- Expanded chart list (shown when a chart is clicked) -->
+
+            <div class="chart-panel-inline" id="chartPanelInline" hidden>
+
+                <div class="chart-head">
+
+                    <span class="chart-badge" id="chartBadge">
+
+                        <i class="fa-solid fa-chart-simple"></i> Top 50
 
                     </span>
 
-                    👋
+                    <button class="chart-close" id="chartClose" aria-label="Close chart">
 
-                </h1>
+                        <i class="fa-solid fa-xmark"></i>
 
-                <p>
+                    </button>
 
-Ready to discover something new? Search, and enjoy instant music previews.
+                </div>
 
-                </p>
+                <div class="chart-copy">
 
-                <button id="discoverBtn">
+                    <h3 id="chartTitle">Top 50</h3>
 
-                    Discover Music
+                    <p id="chartSub">Live chart</p>
 
-                </button>
+                </div>
 
-            </div>
+                <div class="chart-list" id="chartList">
 
-            <div class="hero-image">
-
-                <i class="fa-solid fa-compact-disc"></i>
-
-            </div>
-
-        </section>
-
-        <!-- SEARCH RESULTS -->
-
-        <section class="songs-section">
-
-            <div class="section-title">
-
-                <h2>
-
-                    Search Results
-
-                </h2>
-
-            </div>
-
-            <div class="song-grid" id="songContainer">
-
-            </div>
-
-        </section>
-
-        <!-- TRENDING -->
-
-        <section class="songs-section">
-
-            <div class="section-title">
-
-                <h2>
-
-                    Trending Songs
-
-                </h2>
-
-            </div>
-
-            <div class="song-grid" id="trendingSongs">
+                </div>
 
             </div>
 
@@ -185,15 +238,19 @@ Ready to discover something new? Search, and enjoy instant music previews.
 
         <!-- RECENTLY PLAYED -->
 
-        <section class="songs-section">
+        <section class="songs-section view" id="recentSection">
 
             <div class="section-title">
 
-                <h2>
+                <h2>Recently Played</h2>
 
-                    Recently Played
+                <button class="text-btn" id="clearRecentBtn">
 
-                </h2>
+                    <i class="fa-solid fa-broom"></i>
+
+                    Clear history
+
+                </button>
 
             </div>
 
@@ -205,27 +262,23 @@ Ready to discover something new? Search, and enjoy instant music previews.
 
     </main>
 
-    <!-- Music Player -->
+    <!-- ================= MUSIC PLAYER ================= -->
 
-    <footer class="player">
+    <footer class="player" id="player">
 
         <div class="player-left">
 
-            <img src="" id="playerImage" alt="Album">
+            <div class="artwork">
 
-            <div>
+                <img src="" id="playerImage" alt="Album artwork">
 
-                <h4 id="playerSong">
+            </div>
 
-                    No Song Playing
+            <div class="track-meta">
 
-                </h4>
+                <h4 id="playerSong">Nothing playing</h4>
 
-                <p id="playerArtist">
-
-                    Harmony Music
-
-                </p>
+                <p id="playerArtist">Harmony — preview player</p>
 
             </div>
 
@@ -235,19 +288,19 @@ Ready to discover something new? Search, and enjoy instant music previews.
 
             <div class="controls">
 
-                <button id="prevBtn">
+                <button id="prevBtn" aria-label="Previous">
 
                     <i class="fa-solid fa-backward-step"></i>
 
                 </button>
 
-                <button id="playBtn">
+                <button id="playBtn" aria-label="Play or pause">
 
                     <i class="fa-solid fa-play"></i>
 
                 </button>
 
-                <button id="nextBtn">
+                <button id="nextBtn" aria-label="Next">
 
                     <i class="fa-solid fa-forward-step"></i>
 
@@ -255,35 +308,49 @@ Ready to discover something new? Search, and enjoy instant music previews.
 
             </div>
 
-            <input type="range" id="progressBar" min="0" max="100" value="0">
+            <div class="progress-row">
+
+                <span id="curTime">0:00</span>
+
+                <input type="range" id="progressBar" min="0" max="100" value="0" aria-label="Seek">
+
+                <span id="durTime">0:30</span>
+
+            </div>
 
         </div>
 
         <div class="player-right">
 
-            <i class="fa-solid fa-volume-high"></i>
+            <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
 
-            <input type="range" id="volumeBar" min="0" max="1" step="0.01" value="1">
+            <input type="range" id="volumeBar" min="0" max="1" step="0.01" value="1" aria-label="Volume">
 
         </div>
 
     </footer>
 
-    <!-- Hidden Audio -->
+    <!-- Hidden audio element -->
 
     <audio id="audioPlayer"></audio>
 
-    <!-- Loading Spinner -->
+    <!-- Loading overlay -->
 
-    <div id="loader" class="loader">
+    <div id="loader" class="loader" role="status" aria-label="Loading">
+
+        <div class="loader-disc">
+
+            <i class="fa-solid fa-headphones"></i>
+
+        </div>
+
+        <p>Tuning in…</p>
 
     </div>
 
     <!-- Toast -->
 
-    <div id="toast">
-
-    </div>
+    <div id="toast" role="status"></div>
 
     <script src="home.js"></script>
 
