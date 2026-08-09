@@ -43,6 +43,41 @@ let currentPlaylist = [];
 let currentContainerId = "recentContainer";
 let isPlaying = false;
 
+// --- SESSION CACHE (avoid hammering the iTunes API on every load) ---
+
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+function cacheGet(key) {
+    try {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return null;
+        const { t, v } = JSON.parse(raw);
+        if (Date.now() - t > CACHE_TTL) return null;
+        return v;
+    } catch (e) {
+        return null;
+    }
+}
+
+function cacheSet(key, value) {
+    try {
+        sessionStorage.setItem(key, JSON.stringify({ t: Date.now(), v: value }));
+    } catch (e) {
+        // storage full/unavailable — ignore
+    }
+}
+
+// --- FETCH WITH TIMEOUT (so a hung request can't block the UI) ---
+
+function fetchJSON(url, ms = 12000) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { signal: ctrl.signal })
+        .then(res => res.json())
+        .finally(() => clearTimeout(timer));
+}
+
+
 // --- LOGIN CHECK ---
 
 if (localStorage.getItem("loggedIn") !== "true") {
@@ -118,6 +153,7 @@ function showView(viewName) {
     if (viewName === "search") {
         mainContent.classList.add("search-mode");
         searchView.hidden = false;
+        renderSuggestions();
     } else {
         mainContent.classList.remove("search-mode");
         searchView.hidden = true;
@@ -186,10 +222,9 @@ const searchStorefronts = ["us", "in", "gb", "au", "de", "ca"];
 
 async function fetchSearchStore(q, cc, limit) {
     try {
-        const res = await fetch(
+        const data = await fetchJSON(
             `https://itunes.apple.com/${cc}/search?term=${encodeURIComponent(q)}&entity=song&limit=${limit}&country=${cc}`
         );
-        const data = await res.json();
         return (data.results || []).filter(s => s.previewUrl);
     } catch (e) {
         return [];
@@ -199,6 +234,7 @@ async function fetchSearchStore(q, cc, limit) {
 async function runSearch(query) {
     const q = (query || searchInput.value).trim();
     if (!q) return;
+    liveSeq++; // cancel any in-flight live search
     showLoader();
     try {
         const lists = await Promise.all(searchStorefronts.map(cc => fetchSearchStore(q, cc, 30)));
@@ -264,6 +300,7 @@ function debouncedLiveSearch() {
             currentSongs = merged;
             renderSongs(currentSongs, songContainer);
             if (searchCount) searchCount.textContent = `${currentSongs.length} tracks`;
+            if (merged.length && searchView.hidden) showView("search");
         } catch (error) {
             // ignore transient type-ahead failures
         }
@@ -271,9 +308,7 @@ function debouncedLiveSearch() {
 }
 
 searchInput.addEventListener("input", () => {
-    if (!searchView.hidden) {
-        debouncedLiveSearch();
-    }
+    debouncedLiveSearch();
 });
 
 // --- TOP CHARTS (Real storefront charts, like Spotify/Apple Music) ---
@@ -334,8 +369,7 @@ function parseRssEntry(entry, i) {
 }
 
 async function fetchStoreChart(cc, limit = 20) {
-    const res = await fetch(`https://itunes.apple.com/${cc}/rss/topsongs/limit=${limit}/json`);
-    const data = await res.json();
+    const data = await fetchJSON(`https://itunes.apple.com/${cc}/rss/topsongs/limit=${limit}/json`);
     const entries = data?.feed?.entry || [];
     return entries.map(parseRssEntry).filter(s => s.previewUrl && s.trackName !== "Unknown Track");
 }
@@ -363,14 +397,14 @@ async function loadChartGlobal() {
 }
 
 async function loadChartBollywood() {
-    const allResults = [];
-    for (const term of hindiChartTerms) {
-        const res = await fetch(
-            `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=10&country=IN`
-        );
-        const data = await res.json();
-        if (data.results) allResults.push(...data.results);
-    }
+    const batches = await Promise.all(
+        hindiChartTerms.map(term =>
+            fetchJSON(`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=10&country=IN`)
+                .then(data => data.results || [])
+                .catch(() => [])
+        )
+    );
+    const allResults = batches.flat();
     const freq = new Map();
     const first = new Map();
     allResults.filter(s => s.previewUrl).forEach(s => {
@@ -386,6 +420,13 @@ async function loadChartBollywood() {
 let chartData = {};
 
 async function loadCharts() {
+    const cacheKey = "harmony:charts:v1";
+    const cached = cacheGet(cacheKey);
+    if (cached) {
+        chartData = cached;
+        renderChartCards();
+        return;
+    }
     try {
         const [india, global, bollywood, hollywood] = await Promise.all([
             loadChartIndia().catch(() => []),
@@ -394,6 +435,9 @@ async function loadCharts() {
             loadChartHollywood().catch(() => [])
         ]);
         chartData = { india, global, bollywood, hollywood };
+        if (Object.values(chartData).some(list => list.length)) {
+            cacheSet(cacheKey, chartData);
+        }
         renderChartCards();
         if (!document.querySelector(".chart-card")) throw new Error("chart render failed");
     } catch (err) {
@@ -458,7 +502,7 @@ function renderChartList(songs) {
         row.innerHTML = `
             <span class="row-rank">${index + 1}</span>
             <div class="row-art">
-                <img src="${song.artworkUrl100.replace("100x100", "300x300")}" alt="">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "300x300")}" alt="">
                 <span class="row-eq"><i></i><i></i><i></i></span>
             </div>
             <div class="row-info">
@@ -503,7 +547,7 @@ const heroGenreTerms = [
     { genre: "English", terms: ["the weeknd", "ed sheeran", "taylor swift", "dua lipa"] },
     { genre: "Desi", terms: ["badshah", "divine", "king", "krsna"] },
     { genre: "South", terms: ["a r rahman", "anirudh ravichander", "devi sri prasad", "sid sriram"] },
-    { genre: "Old", terms: ["kishore kumar", "lata mangeshkar", "mohammed rafi", "aas bhosle"] },
+    { genre: "Old", terms: ["kishore kumar", "lata mangeshkar", "mohammed rafi", "asha bhosle"] },
     { genre: "Trending", terms: ["top songs 2026", "viral songs", "hottest hits", "charts"] },
     { genre: "Global Pop", terms: ["abel tesfaye", "bruno mars", "coldplay", "justin bieber"] },
     { genre: "Lo-fi", terms: ["lofi beats", "lofi hip hop", "chill vibes", "coffee house"] }
@@ -512,6 +556,13 @@ const heroGenreTerms = [
 let heroSongs = [];
 
 async function loadHeroMarquee() {
+    const cacheKey = "harmony:hero:v1";
+    const cached = cacheGet(cacheKey);
+    if (cached) {
+        heroSongs = cached;
+        renderHeroMarquee();
+        return;
+    }
     try {
         const allResults = [];
 
@@ -531,10 +582,9 @@ async function loadHeroMarquee() {
         );
         const genreBatches = await Promise.all(
             genreJobs.map(async ({ term, genre }) => {
-                const res = await fetch(
+                const data = await fetchJSON(
                     `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=20`
                 );
-                const data = await res.json();
                 return (data.results || []).filter(s => s.previewUrl).map(s => ({ ...s, _genre: genre }));
             }).map(p => p.catch(() => []))
         );
@@ -552,6 +602,7 @@ async function loadHeroMarquee() {
         unique.sort(() => Math.random() - 0.5);
         const start = Math.floor(Math.random() * Math.max(unique.length - 30, 0));
         heroSongs = unique.length > 30 ? unique.slice(start, start + 30) : unique;
+        if (heroSongs.length) cacheSet(cacheKey, heroSongs);
         renderHeroMarquee();
     } catch (err) {
         console.log(err);
@@ -569,7 +620,7 @@ function renderHeroMarquee() {
     track.innerHTML = doubled.map((song, index) => `
         <div class="hero-card" data-trackid="${song.trackId}" onclick="playHeroSong(${index})">
             <div class="hc-art">
-                <img src="${song.artworkUrl100.replace("100x100", "500x500")}" alt="${song.trackName}">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "500x500")}" alt="${song.trackName}">
                 <span class="hc-genre"><i class="fa-solid fa-headphones"></i>${song._genre}</span>
                 <button class="hc-play" aria-label="Play ${song.trackName}">
                     <i class="fa-solid fa-play"></i>
@@ -617,7 +668,7 @@ function renderSongs(songs, container) {
         row.innerHTML = `
             <span class="row-rank">${index + 1}</span>
             <div class="row-art">
-                <img src="${song.artworkUrl100.replace("100x100", "300x300")}" alt="${song.trackName}">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "300x300")}" alt="${song.trackName}">
                 <span class="row-eq"><i></i><i></i><i></i></span>
             </div>
             <div class="row-info">
@@ -679,19 +730,22 @@ function syncActiveCard() {
 
 function playSong(index, containerId) {
     currentPlaylist = getSongArray(containerId);
+    if (!Array.isArray(currentPlaylist) || currentPlaylist.length === 0) {
+        showToast("Nothing to play yet", "#ef4444");
+        return;
+    }
     currentContainerId = containerId;
-    currentIndex = index;
+    currentIndex = ((index % currentPlaylist.length) + currentPlaylist.length) % currentPlaylist.length;
     const song = currentPlaylist[currentIndex];
     if (!song.previewUrl) {
         showToast("Preview not available", "#ef4444");
         return;
     }
     audioPlayer.src = song.previewUrl;
-    playerImage.src = song.artworkUrl100.replace("100x100", "500x500");
+    playerImage.src = (song.artworkUrl100 || "").replace("100x100", "500x500");
     playerSong.textContent = song.trackName;
     playerArtist.textContent = song.artistName;
     if (durTime) durTime.textContent = "0:30";
-    audioPlayer.play();
     isPlaying = true;
     playBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
     playBtn.classList.add("playing");
@@ -699,6 +753,14 @@ function playSong(index, containerId) {
     player.classList.add("show");
     addRecent(song);
     syncActiveCard();
+    audioPlayer.play().catch(() => {
+        isPlaying = false;
+        playBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+        playBtn.classList.remove("playing");
+        player.classList.remove("is-playing");
+        syncActiveCard();
+        showToast("Unable to play preview", "#ef4444");
+    });
 }
 
 // --- PLAY / PAUSE ---
@@ -712,12 +774,19 @@ playBtn.addEventListener("click", () => {
         playBtn.classList.remove("playing");
         player.classList.remove("is-playing");
     } else {
-        audioPlayer.play();
         isPlaying = true;
         playBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
         playBtn.classList.add("playing");
         player.classList.add("is-playing");
         player.classList.add("show");
+        audioPlayer.play().catch(() => {
+            isPlaying = false;
+            playBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+            playBtn.classList.remove("playing");
+            player.classList.remove("is-playing");
+            syncActiveCard();
+            showToast("Unable to play preview", "#ef4444");
+        });
     }
     syncActiveCard();
 });
@@ -804,6 +873,8 @@ document.addEventListener("dblclick", (e) => {
 // --- PLAYER IMAGE FALLBACK ---
 
 playerImage.onerror = function () {
+    if (this.dataset.fallback) return;
+    this.dataset.fallback = "1";
     this.src = "https://placehold.co/300x300/eef4fc/2563eb?text=Harmony";
 };
 
@@ -844,7 +915,7 @@ function renderRecent() {
         card.dataset.trackid = song.trackId;
         card.innerHTML = `
             <div class="art-box">
-                <img src="${song.artworkUrl100.replace("100x100", "500x500")}" alt="${song.trackName}">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "500x500")}" alt="${song.trackName}">
                 <span class="card-eq"><i></i><i></i><i></i><i></i></span>
                 <button
                     class="play-btn"
@@ -924,7 +995,8 @@ window.addEventListener("online", () => {
 // --- IMAGE FALLBACK ---
 
 document.addEventListener("error", (e) => {
-    if (e.target.tagName === "IMG") {
+    if (e.target.tagName === "IMG" && !e.target.dataset.fallback) {
+        e.target.dataset.fallback = "1";
         e.target.src = "https://placehold.co/300x300/eef4fc/2563eb?text=Harmony";
     }
 }, true);
@@ -934,19 +1006,17 @@ document.addEventListener("error", (e) => {
 window.addEventListener("load", () => {
     const lastSong = JSON.parse(localStorage.getItem(userKey("lastSong")));
     if (!lastSong) return;
-    playerImage.src = lastSong.artworkUrl100.replace("100x100", "500x500");
+    playerImage.src = (lastSong.artworkUrl100 || "").replace("100x100", "500x500");
     playerSong.textContent = lastSong.trackName;
     playerArtist.textContent = lastSong.artistName;
 });
 
 // --- APP INITIALIZATION ---
 
-function initializeApp() {
+async function initializeApp() {
     if (window.matchMedia("(max-width: 640px)").matches) {
         searchInput.placeholder = "Search songs, artists…";
     }
-    loadHeroMarquee();
-    loadCharts();
     renderRecent();
     updateRangeFill(volumeBar);
     updateRangeFill(progressBar);
@@ -954,6 +1024,9 @@ function initializeApp() {
         audioPlayer.volume = 1;
         volumeBar.value = 1;
     }
+    showLoader();
+    await Promise.allSettled([loadHeroMarquee(), loadCharts()]);
+    hideLoader();
 }
 
 initializeApp();

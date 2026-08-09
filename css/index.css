@@ -318,6 +318,14 @@ button {
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
+.brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
 .brand-name {
     font-family: var(--font-display);
     font-size: 21px;
@@ -579,6 +587,12 @@ button {
     background: radial-gradient(circle at 50% 50%, #ffffff 0 40%, #eaf2ff 40% 62%, #dbe9ff 62% 100%);
     box-shadow: 0 40px 90px rgba(45, 95, 210, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.6);
     animation: spin-slow 26s linear infinite;
+    transition: scale .5s var(--ease), box-shadow .5s var(--ease);
+}
+
+.vinyl:hover .vinyl-disc {
+    scale: 1.07;
+    box-shadow: 0 50px 110px rgba(45, 95, 210, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.7);
 }
 
 .vinyl-disc::before {
@@ -616,6 +630,14 @@ button {
     font-size: 30px;
     background: var(--grad-blue);
     box-shadow: 0 18px 40px rgba(37, 99, 235, 0.35);
+}
+
+.vinyl-center img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
 }
 
 .pulse-ring {
@@ -774,13 +796,14 @@ button {
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: 0 10px 34px rgba(45, 95, 210, 0.08);
-    transition: translate .35s var(--ease), transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+    transition: translate .35s var(--ease), scale .35s var(--ease), transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
 }
 
 .feature-box:hover {
-    translate: 0 -5px;
+    translate: 0 -6px;
+    scale: 1.025;
     background: var(--glass-strong);
-    border-color: rgba(255, 255, 255, 0.95);
+    border-color: rgba(37, 99, 235, 0.35);
     box-shadow: var(--shadow-hover);
 }
 
@@ -795,6 +818,15 @@ button {
     background: rgba(59, 130, 246, 0.12);
     border: 1px solid rgba(59, 130, 246, 0.22);
     margin-bottom: 22px;
+    transition: transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease), color .35s var(--ease), box-shadow .35s var(--ease);
+}
+
+.feature-box:hover .feature-icon {
+    transform: scale(1.12) rotate(-6deg);
+    background: var(--grad-blue);
+    border-color: transparent;
+    color: var(--on-accent);
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.32);
 }
 
 .feature-box h3 {
@@ -830,6 +862,15 @@ button {
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: var(--shadow-1);
+    overflow: hidden;
+    transition: translate .4s var(--ease), scale .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease);
+}
+
+.developer-image:hover {
+    translate: 0 -6px;
+    scale: 1.01;
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: var(--shadow-hover);
 }
 
 .developer-image img {
@@ -837,11 +878,11 @@ button {
     height: 300px;
     object-fit: cover;
     border-radius: calc(var(--radius-lg) - 8px);
-    transition: transform .5s var(--ease);
+    transition: transform .55s var(--ease);
 }
 
-.developer-image img:hover {
-    transform: scale(1.015);
+.developer-image:hover img {
+    transform: scale(1.08);
 }
 
 .role-chip {
@@ -948,7 +989,14 @@ button {
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: 0 10px 30px rgba(45, 95, 210, 0.07);
     overflow: hidden;
-    transition: border-color .35s var(--ease), box-shadow .35s var(--ease);
+    transition: translate .35s var(--ease), scale .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+
+.faq-item:hover {
+    translate: 0 -3px;
+    scale: 1.008;
+    border-color: rgba(59, 130, 246, 0.35);
+    box-shadow: var(--shadow-1);
 }
 
 .faq-item.open {
@@ -1019,6 +1067,13 @@ button {
     backdrop-filter: blur(24px) saturate(160%);
     -webkit-backdrop-filter: blur(24px) saturate(160%);
     box-shadow: var(--shadow-1);
+    transition: scale .45s var(--ease), border-color .45s var(--ease), box-shadow .45s var(--ease);
+}
+
+.cta-panel:hover {
+    scale: 1.012;
+    border-color: rgba(37, 99, 235, 0.3);
+    box-shadow: var(--shadow-hover);
 }
 
 .cta-panel::before {
