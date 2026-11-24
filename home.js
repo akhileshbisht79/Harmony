@@ -69,12 +69,52 @@ function cacheSet(key, value) {
 
 // --- FETCH WITH TIMEOUT (so a hung request can't block the UI) ---
 
+const MAX_CONCURRENT_REQUESTS = 6;
+let activeRequests = 0;
+const requestQueue = [];
+const inFlightRequests = new Map();
+
+function runNextRequest() {
+    if (activeRequests >= MAX_CONCURRENT_REQUESTS || requestQueue.length === 0) return;
+
+    const startRequest = requestQueue.shift();
+    activeRequests++;
+    startRequest();
+}
+
 function fetchJSON(url, ms = 12000) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), ms);
-    return fetch(url, { signal: ctrl.signal })
-        .then(res => res.json())
-        .finally(() => clearTimeout(timer));
+    // Reuse an identical request while it is already in progress.
+    if (inFlightRequests.has(url)) return inFlightRequests.get(url);
+
+    const request = new Promise((resolve, reject) => {
+        requestQueue.push(async () => {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), ms);
+
+            try {
+                const response = await fetch(url, { signal: ctrl.signal });
+                if (!response.ok) {
+                    throw new Error(`Request failed (${response.status}): ${url}`);
+                }
+                resolve(await response.json());
+            } catch (error) {
+                reject(error);
+            } finally {
+                clearTimeout(timer);
+                activeRequests--;
+                runNextRequest();
+            }
+        });
+
+        runNextRequest();
+    });
+
+    inFlightRequests.set(url, request);
+    request.then(
+        () => inFlightRequests.delete(url),
+        () => inFlightRequests.delete(url)
+    );
+    return request;
 }
 
 
@@ -502,7 +542,7 @@ function renderChartList(songs) {
         row.innerHTML = `
             <span class="row-rank">${index + 1}</span>
             <div class="row-art">
-                <img src="${(song.artworkUrl100 || "").replace("100x100", "300x300")}" alt="">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "300x300")}" alt="" loading="lazy" decoding="async">
                 <span class="row-eq"><i></i><i></i><i></i></span>
             </div>
             <div class="row-info">
@@ -620,7 +660,7 @@ function renderHeroMarquee() {
     track.innerHTML = doubled.map((song, index) => `
         <div class="hero-card" data-trackid="${song.trackId}" onclick="playHeroSong(${index})">
             <div class="hc-art">
-                <img src="${(song.artworkUrl100 || "").replace("100x100", "500x500")}" alt="${song.trackName}">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "500x500")}" alt="${song.trackName}" loading="lazy" decoding="async">
                 <span class="hc-genre"><i class="fa-solid fa-headphones"></i>${song._genre}</span>
                 <button class="hc-play" aria-label="Play ${song.trackName}">
                     <i class="fa-solid fa-play"></i>
@@ -668,7 +708,7 @@ function renderSongs(songs, container) {
         row.innerHTML = `
             <span class="row-rank">${index + 1}</span>
             <div class="row-art">
-                <img src="${(song.artworkUrl100 || "").replace("100x100", "300x300")}" alt="${song.trackName}">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "300x300")}" alt="${song.trackName}" loading="lazy" decoding="async">
                 <span class="row-eq"><i></i><i></i><i></i></span>
             </div>
             <div class="row-info">
@@ -915,7 +955,7 @@ function renderRecent() {
         card.dataset.trackid = song.trackId;
         card.innerHTML = `
             <div class="art-box">
-                <img src="${(song.artworkUrl100 || "").replace("100x100", "500x500")}" alt="${song.trackName}">
+                <img src="${(song.artworkUrl100 || "").replace("100x100", "500x500")}" alt="${song.trackName}" loading="lazy" decoding="async">
                 <span class="card-eq"><i></i><i></i><i></i><i></i></span>
                 <button
                     class="play-btn"
